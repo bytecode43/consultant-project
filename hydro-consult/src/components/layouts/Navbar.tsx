@@ -1,26 +1,67 @@
-import { Link } from 'react-router-dom'
+/* src/components/layouts/Navbar.tsx */
+import { Link, useNavigate } from 'react-router-dom';
+
 export default function Navbar() {
+  const navigate = useNavigate();
+
+  const goToServices = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (window.location.pathname === '/') {
+      e.preventDefault();
+      document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      navigate('/#services');
+    }
+  };
+
+  const goToContact = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (window.location.pathname === '/') {
+      e.preventDefault();
+      document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      navigate('/#contact');
+    }
+  };
+
+  const menu = [
+    { label: 'Home',         to: '/' },
+    // { label: 'About Us',     to: '/about-us' },
+    { label: 'Our Services', to: '/#services', onClick: goToServices },
+    // { label: 'News & Events', to: '/news-events' },
+    { label: 'Our Project',  to: '/our-project' },
+    // { label: 'Careers',      to: '/careers' },
+  ];
+
   return (
     <nav className="fixed top-0 w-full bg-white shadow z-50">
       <div className="container mx-auto flex items-center justify-between py-4">
         <Link to="/">
-        <img
+          <img
             src="https://picsum.photos/200/300"
-            alt="Hydro‑Consult"
+            alt="Hydro-Consult"
             className="h-20 w-20 object-cover"
           />
         </Link>
+
+        {/* desktop menu */}
         <ul className="hidden md:flex space-x-8 text-gray-700">
-          {['Home','About Us','Our Services','News & Events','Our Project','Careers'].map(text => (
-            <li key={text}>
-              <Link to={`/${text.toLowerCase().replace(/ & /, '-').replace(/\s+/g,'-')}`}
-                    className="hover:text-primary transition">{text}</Link>
+          {menu.map(({ label, to, onClick }) => (
+            <li key={label}>
+              <Link to={to} onClick={onClick} className="hover:text-primary transition">
+                {label}
+              </Link>
             </li>
           ))}
         </ul>
-        <Link to="/contact" className="btn-primary hidden md:inline-block">Contact Us</Link>
-        {/* mobile menu button here */}
+
+        {/* Contact Us */}
+        <Link
+          to="/#contact"
+          onClick={goToContact}
+          className="btn-primary hidden md:inline-block bg-amber-600"
+        >
+          Contact&nbsp;Us
+        </Link>
       </div>
     </nav>
-  )
+  );
 }
